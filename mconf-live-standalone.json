@@ -1,6 +1,9 @@
 {
   "default_attributes": {
     "bbb": {
+      "demo": {
+        "enabled": true
+      },
       "recording": {
         "playback_formats": "presentation"
       }
