@@ -1,0 +1,31 @@
+{
+  "default_attributes": {
+    "bbb": {
+      "recording": {
+        "playback_formats": "presentation"
+      }
+    },
+    "mconf": {
+      "recording_server": {
+        "enabled": true
+      }
+    }
+  },
+  "description": "This role defines the installation and update of a Mconf-Live server standalone",
+  "env_run_lists": {
+  },
+  "override_attributes": {
+  },
+  "name": "mconf-live-standalone",
+  "run_list": [
+    "recipe[bigbluebutton::abort-if-being-used]",
+    "recipe[apt::default]",
+    "recipe[chef_handler::default]",
+    "recipe[mconf-utils::reboot-requestor]",
+    "recipe[reboot-handler]",
+    "recipe[mconf-utils::base]",
+    "recipe[logrotate::default]",
+    "recipe[bigbluebutton]",
+    "recipe[mconf-live]"
+  ]
+}

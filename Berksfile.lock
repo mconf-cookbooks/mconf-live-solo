@@ -1,0 +1,61 @@
+DEPENDENCIES
+  bigbluebutton
+    git: https://github.com/mconf-cookbooks/bigbluebutton
+    revision: 84b06d46af21fb4f3923a8929be7a8fcc32d094b
+  mconf-live
+    git: https://github.com/mconf-cookbooks/mconf-live
+    revision: 3e4f0866228be89a46aafc5007603e98b479206a
+  mconf-utils
+    git: https://github.com/mconf-cookbooks/mconf-utils
+    revision: ac06d558c50df2d6aeca5e9fdde25471c78e44c8
+  reboot-handler
+    git: https://github.com/mconf-cookbooks/reboot-handler
+    revision: 0c952a3ba3d43e3030ef8ece26b477f591d4314f
+    ref: mconf
+  yasm (= 1.0.0)
+
+GRAPH
+  apt (2.7.0)
+  bigbluebutton (1.0.0)
+    apt (>= 0.0.0)
+    ffmpeg (>= 0.0.0)
+    libvpx (>= 0.0.0)
+    logrotate (>= 0.0.0)
+  build-essential (2.2.3)
+  chef_handler (1.1.9)
+  dmg (2.2.2)
+  ffmpeg (0.4.4)
+    build-essential (>= 0.0.0)
+    git (>= 0.0.0)
+    libvpx (>= 0.0.0)
+    x264 (>= 0.0.0)
+    yasm (>= 0.0.0)
+  git (4.2.2)
+    build-essential (>= 0.0.0)
+    dmg (>= 0.0.0)
+    windows (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  libvpx (1.0.1)
+    build-essential (>= 0.0.0)
+    git (>= 0.0.0)
+    yasm (>= 0.0.0)
+  logrotate (1.9.1)
+  mconf-live (1.0.0)
+    bigbluebutton (>= 0.0.0)
+  mconf-utils (0.1.0)
+    sudo (~> 2.7)
+  reboot-handler (1.0.0)
+    chef_handler (>= 0.0.0)
+  sudo (2.7.1)
+  windows (1.37.0)
+    chef_handler (>= 0.0.0)
+  x264 (0.5.1)
+    build-essential (>= 0.0.0)
+    git (>= 0.0.0)
+    yasm (>= 0.0.0)
+  yasm (1.0.0)
+    build-essential (>= 0.0.0)
+    git (>= 0.0.0)
+  yum (3.6.1)
+  yum-epel (0.6.0)
+    yum (~> 3.0)
