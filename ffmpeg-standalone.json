@@ -1,0 +1,33 @@
+{
+  "description": "This role installs FFmpeg for Mconf-Live",
+  "x264": {
+    "install_method": "none"
+  },
+  "libvpx": {
+    "install_method": "none"
+  },
+  "ffmpeg": {
+    "git_repository": "https://github.com/FFmpeg/FFmpeg.git",
+    "git_revision": "n2.4.2",
+    "compile_flags": [
+      "--enable-x11grab",
+      "--enable-gpl",
+      "--enable-version3",
+      "--enable-postproc",
+      "--enable-libvorbis",
+      "--enable-libvpx",
+      "--enable-librtmp"
+    ]
+  },
+  "default_attributes": {
+  },
+  "env_run_lists": {
+  },
+  "override_attributes": {
+  },
+  "name": "ffmpeg-standalone",
+  "run_list": [
+    "recipe[libvpx::package]",
+    "recipe[ffmpeg::source]"
+  ]
+}

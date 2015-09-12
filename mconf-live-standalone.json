@@ -1,20 +1,30 @@
 {
-  "default_attributes": {
-    "bbb": {
-      "demo": {
-        "enabled": true
-      },
-      "recording": {
-        "playback_formats": "presentation"
-      }
+  "description": "This role defines the installation and update of a Mconf-Live server standalone",
+  "bbb": {
+    "demo": {
+      "enabled": true
     },
-    "mconf": {
-      "recording_server": {
-        "enabled": true
-      }
+    "recording": {
+      "playback_formats": "presentation"
+    },
+    "webhooks": {
+      "enabled": true
+    },
+    "check": {
+      "enabled": true
+    },
+    "bigbluebutton": {
+      "repo_url": "http://mconf-live-ci.nuvem.ufrgs.br/apt/production",
+      "key_url": "http://mconf-live-ci.nuvem.ufrgs.br/apt/public.asc"
     }
   },
-  "description": "This role defines the installation and update of a Mconf-Live server standalone",
+  "mconf": {
+    "recording_server": {
+      "enabled": true
+    }
+  },
+  "default_attributes": {
+  },
   "env_run_lists": {
   },
   "override_attributes": {
