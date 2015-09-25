@@ -1,7 +1,7 @@
 DEPENDENCIES
   bigbluebutton
     git: https://github.com/mconf-cookbooks/bigbluebutton
-    revision: 4e8c0b05d9cd3da89d17c9c5304a63cf3cb3e52f
+    revision: db3ef90813efb5c61828872fd9497ca6f6434e6d
   ffmpeg
     git: https://github.com/mconf-cookbooks/ffmpeg
     revision: 989a9ac63b6b1788347357bbb5c3bc87232dd112
