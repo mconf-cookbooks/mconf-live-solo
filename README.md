@@ -1,6 +1,6 @@
 # Utilities for Mconf using Chef Zero
 
-To install Mconf-Live 0.7.1, execute:
+To install Mconf-Live 0.7.5, execute:
 
 ```bash
 ./configure

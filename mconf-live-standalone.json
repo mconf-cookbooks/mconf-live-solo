@@ -14,7 +14,7 @@
       "enabled": true
     },
     "bigbluebutton": {
-      "repo_url": "http://mconf-live-ci.nuvem.ufrgs.br/apt/production",
+      "repo_url": "http://mconf-live-ci.nuvem.ufrgs.br/apt/mconf-live0.7.5",
       "key_url": "http://mconf-live-ci.nuvem.ufrgs.br/apt/public.asc"
     }
   },

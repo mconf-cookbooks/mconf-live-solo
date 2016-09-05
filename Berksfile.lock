@@ -1,7 +1,7 @@
 DEPENDENCIES
   bigbluebutton
     git: https://github.com/mconf-cookbooks/bigbluebutton
-    revision: 4e8c0b05d9cd3da89d17c9c5304a63cf3cb3e52f
+    revision: d91c74b0b2f56f5c66cddf8067aad2976a8fa323
   ffmpeg
     git: https://github.com/mconf-cookbooks/ffmpeg
     revision: 989a9ac63b6b1788347357bbb5c3bc87232dd112
@@ -12,10 +12,10 @@ DEPENDENCIES
     ref: fix-ubu
   mconf-live
     git: https://github.com/mconf-cookbooks/mconf-live
-    revision: a094259e5eb9ccb4870bbd8ae5fc946dd9cd87a5
+    revision: aa0c4992558df8f938327a698a64608d1396e672
   mconf-utils
     git: https://github.com/mconf-cookbooks/mconf-utils
-    revision: 8169c1243c6b97d7ee76caaf56e082cc07ff276e
+    revision: 0d16983c335d4dc9f87edeebb289238764202dcc
   reboot-handler
     git: https://github.com/mconf-cookbooks/reboot-handler
     revision: 0c952a3ba3d43e3030ef8ece26b477f591d4314f
@@ -23,50 +23,60 @@ DEPENDENCIES
   yasm (= 1.0.0)
 
 GRAPH
-  apt (2.7.0)
-  bigbluebutton (1.0.1)
+  apt (4.0.2)
+    compat_resource (>= 12.10)
+  bigbluebutton (1.0.10)
     apt (>= 0.0.0)
     ffmpeg (>= 0.0.0)
     libvpx (>= 0.0.0)
     logrotate (>= 0.0.0)
-  build-essential (2.2.3)
-  chef_handler (1.2.0)
-  cron (1.6.1)
-  dmg (2.2.2)
+  build-essential (6.0.4)
+    compat_resource (>= 12.10)
+    mingw (>= 1.1)
+    seven_zip (>= 0.0.0)
+  chef_handler (1.4.0)
+  compat_resource (12.14.0)
+  cron (1.7.6)
+  dmg (2.4.0)
   ffmpeg (0.4.4)
     build-essential (>= 0.0.0)
     git (>= 0.0.0)
     libvpx (>= 0.0.0)
     x264 (>= 0.0.0)
     yasm (>= 0.0.0)
-  git (4.3.3)
+  git (5.0.0)
     build-essential (>= 0.0.0)
     dmg (>= 0.0.0)
-    windows (>= 0.0.0)
     yum-epel (>= 0.0.0)
   libvpx (1.1.0)
     build-essential (>= 0.0.0)
     git (>= 0.0.0)
     yasm (>= 0.0.0)
-  logrotate (1.9.2)
-  mconf-live (1.0.1)
+  logrotate (2.1.0)
+    compat_resource (>= 0.0.0)
+  mconf-live (1.0.5)
     bigbluebutton (>= 0.0.0)
   mconf-utils (0.1.1)
     cron (>= 0.0.0)
     logrotate (>= 0.0.0)
     sudo (~> 2.7)
+  mingw (1.2.4)
+    compat_resource (>= 0.0.0)
+    seven_zip (>= 0.0.0)
   reboot-handler (1.0.0)
     chef_handler (>= 0.0.0)
-  sudo (2.7.2)
-  windows (1.38.1)
+  seven_zip (2.0.2)
+    windows (>= 1.2.2)
+  sudo (2.11.0)
+  windows (1.44.3)
     chef_handler (>= 0.0.0)
-  x264 (0.5.1)
+  x264 (0.6.0)
     build-essential (>= 0.0.0)
     git (>= 0.0.0)
     yasm (>= 0.0.0)
   yasm (1.0.0)
     build-essential (>= 0.0.0)
     git (>= 0.0.0)
-  yum (3.6.3)
-  yum-epel (0.6.2)
-    yum (~> 3.2)
+  yum (3.12.0)
+  yum-epel (0.7.1)
+    yum (>= 3.6.3)
