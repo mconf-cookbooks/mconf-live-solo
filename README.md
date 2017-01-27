@@ -23,7 +23,7 @@ If your server is responding only to an IP and you wish to configure a domain na
 ```
   ...
   "bbb": {
-    "ip": "my-server.institution.org"
+    "ip": "my-server.institution.org",
     "demo": {
     ...
   },
