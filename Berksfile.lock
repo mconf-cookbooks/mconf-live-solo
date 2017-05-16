@@ -1,7 +1,7 @@
 DEPENDENCIES
   bigbluebutton
     git: https://github.com/mconf-cookbooks/bigbluebutton
-    revision: 9288dbccd34e2c13d21a945f904d086d38c25144
+    revision: 9a75591125d35cd50a354d2f63a992bf953fb526
   ffmpeg
     git: https://github.com/mconf-cookbooks/ffmpeg
     revision: 989a9ac63b6b1788347357bbb5c3bc87232dd112
@@ -12,7 +12,7 @@ DEPENDENCIES
     ref: fix-ubu
   mconf-live
     git: https://github.com/mconf-cookbooks/mconf-live
-    revision: aa0c4992558df8f938327a698a64608d1396e672
+    revision: 3f37a6296e87a2b1ae0334df43ba954420790d60
   mconf-utils
     git: https://github.com/mconf-cookbooks/mconf-utils
     revision: 3de425e0078f16b4d711a9fe9e3a584c1bdf29ed
@@ -53,7 +53,7 @@ GRAPH
     git (>= 0.0.0)
     yasm (>= 0.0.0)
   logrotate (1.9.2)
-  mconf-live (1.0.5)
+  mconf-live (1.0.6)
     bigbluebutton (>= 0.0.0)
   mconf-utils (0.1.1)
     cron (>= 0.0.0)
