@@ -6,14 +6,14 @@ Install Mconf-Live 0.7.5:
 
 ```bash
 ./configure
-sudo chef-client -z -c solo.rb -j mconf-live-standalone.json
+sudo chef-solo -c solo.rb -j mconf-live-standalone.json
 ```
 
 Install FFmpeg 2.4.2 (Mconf-Live dependency):
 
 ```bash
 ./configure
-sudo chef-client -z -c solo.rb -j ffmpeg-standalone.json
+sudo chef-solo -c solo.rb -j ffmpeg-standalone.json
 ```
 
 ## Configure a domain name

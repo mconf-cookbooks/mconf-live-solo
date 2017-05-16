@@ -15,7 +15,7 @@ DEPENDENCIES
     revision: aa0c4992558df8f938327a698a64608d1396e672
   mconf-utils
     git: https://github.com/mconf-cookbooks/mconf-utils
-    revision: 0d16983c335d4dc9f87edeebb289238764202dcc
+    revision: 3de425e0078f16b4d711a9fe9e3a584c1bdf29ed
   reboot-handler
     git: https://github.com/mconf-cookbooks/reboot-handler
     revision: 0c952a3ba3d43e3030ef8ece26b477f591d4314f
@@ -31,7 +31,9 @@ GRAPH
     logrotate (>= 0.0.0)
   build-essential (2.0.6)
   chef_handler (1.1.6)
-  cron (1.4.3)
+  compat_resource (12.19.0)
+  cron (4.1.1)
+    compat_resource (>= 0.0.0)
   dmg (2.2.0)
   ffmpeg (0.4.4)
     build-essential (>= 0.0.0)
@@ -62,7 +64,7 @@ GRAPH
     chef_handler (>= 0.0.0)
   runit (1.7.6)
     packagecloud (>= 0.0.0)
-  sudo (2.9.0)
+  sudo (2.11.0)
   windows (1.34.2)
     chef_handler (>= 0.0.0)
   x264 (0.5.1)

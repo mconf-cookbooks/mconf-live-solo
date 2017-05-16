@@ -1,28 +1,210 @@
 #!/bin/bash -xe
 
+function install_common {
+        if [[ $(sudo apt-get update 2>&1) =~ "dpkg --configure -a" ]]; then
+            sudo dpkg --configure -a
+        fi
+        sudo apt-get install locales language-pack-en -y
+
+        if [[ ! $(cat /etc/default/locale | grep '^LANG=') ]]; then
+            echo 'LANG="en_US.UTF-8"' | sudo tee -a /etc/default/locale
+            sudo update-locale LANG=en_US.UTF-8
+        fi
+
+        if [[ $(locale 2>&1) =~ "Cannot set LC_ALL to default locale" ]]; then
+            echo 'LC_ALL=en_US.UTF-8' | sudo tee -a /etc/default/locale
+            export LC_ALL=en_US.UTF-8
+        fi
+
+        sudo apt-get install software-properties-common python-software-properties -y
+        sudo apt-get install git build-essential ntp wget -y
+}
+
+function install_ruby {
+    PREFIX_VERSION=`echo ${RUBY_VERSION} | sed "s/^\([0-9]*\).\([0-9]*\).*/\1.\2/g"`
+    CHECK_RUBY=$(if ruby --version | grep -q "\b${PREFIX_VERSION}\b"; then echo "0"; else echo "1"; fi)
+
+    if [ ${CHECK_RUBY} == "0" ]; then
+        echo "Ruby ${RUBY_VERSION} is already installed!";
+    else
+        echo "Ruby is not installed yet...";
+
+        # select ruby packages based on the version requested
+        # this is also done here to restrict the versions supported to the versions
+        # we're sure will work
+        if [[ $RUBY_VERSION =~ ^2.3[.0-9]* ]]; then
+            RUBY_PKGS="ruby2.3 ruby2.3-dev"
+        elif [[ $RUBY_VERSION =~ ^2.2[.0-9]* ]]; then
+            RUBY_PKGS="ruby2.2 ruby2.2-dev"
+        elif [[ $RUBY_VERSION =~ ^2.1[.0-9]* ]]; then
+            RUBY_PKGS="ruby2.1 ruby2.1-dev"
+        elif [[ $RUBY_VERSION =~ ^2.0[.0-9]* ]]; then
+            RUBY_PKGS="ruby2.0 ruby2.0-dev"
+        else
+            RUBY_PKGS="ruby1.9.3"
+        fi
+
+        # use a custom ppa for ruby >= 2.0
+        # we do it here because we need it before the 'apt-get update' below
+        if [[ $RUBY_VERSION =~ ^2.[0-9]+ ]]; then
+            sudo add-apt-repository ppa:brightbox/ruby-ng -y
+            sudo apt-get update
+        fi
+
+        sudo apt-get install ${RUBY_PKGS} -y
+
+        # set the installed ruby as default, in case we have others
+        if [[ $RUBY_VERSION =~ ^(2.[0-9]+) ]]; then
+            RUBY_VERSION_SHORT=${BASH_REMATCH[0]}
+        else
+            RUBY_VERSION_SHORT=1.9.1
+        fi
+        sudo update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby$RUBY_VERSION_SHORT 0
+        sudo update-alternatives --install /usr/bin/gem gem /usr/bin/gem$RUBY_VERSION_SHORT 0
+        sudo update-alternatives --set ruby /usr/bin/ruby$RUBY_VERSION_SHORT
+        sudo update-alternatives --set gem /usr/bin/gem$RUBY_VERSION_SHORT
+    fi
+}
+
+function install_chef_gem {
+    # Remove Chef deb if it is installed before installing Chef via gem.
+    if is_chef_deb_installed; then
+        remove_chef_deb
+    fi
+
+    ## We check whether the required version of Chef is already installed.
+    if is_chef_gem_installed ${CHEF_VERSION}; then
+        echo "Chef version ${CHEF_VERSION} is already installed.";
+    else
+        echo "Chef version ${CHEF_VERSION} is not installed yet.";
+
+        # chef 11.18.* has a loose dependency on rack, that from version >= 2.0
+        # requires ruby >= 2.2.2, so we have to install rack beforehand
+        # TODO: this can be removed when we migrate to ruby 2.2
+        if [[ $CHEF_VERSION =~ ^11.18[.0-9]* ]]; then
+            gem install net-ssh --version '= 2.9.2' --no-ri --no-rdoc
+            gem install net-ssh-gateway --version '= 1.2.0' --no-ri --no-rdoc
+            gem install rack --version '= 1.6.4' --no-ri --no-rdoc
+        fi
+
+        gem install chef --version "= ${CHEF_VERSION}" --no-ri --no-rdoc -V --conservative
+    fi
+}
+
+function install_chef_deb {
+    # Remove Chef gem if it is installed before installing Chef via deb.
+    if is_chef_gem_installed; then
+        remove_chef_gem
+    fi
+
+    ## We check whether the required version of Chef is already installed.
+    if is_chef_deb_installed ${CHEF_VERSION}; then
+        echo "Chef version ${CHEF_VERSION} is already installed.";
+    else
+        echo "Chef version ${CHEF_VERSION} is not installed yet.";
+
+        BASE_URL=https://packages.chef.io/stable/ubuntu
+        OS_VERSION=`cat /etc/*release | grep "DISTRIB_RELEASE" | sed 's/.*=\(.*\)/\1/'`
+
+        if (( `uname -m` == "x86_64" )); then
+            CPU_ARCH=amd64
+        else
+            CPU_ARCH=i386
+        fi
+
+        CHEF_FILE=chef_${CHEF_VERSION}-1_${CPU_ARCH}.deb
+        URL=${BASE_URL}/${OS_VERSION}/${CHEF_FILE}
+
+        ## Retrieve Chef package from Chef's official site.
+        echo "Getting Chef version ${CHEF_VERSION}...";
+        if [[ `wget -S --spider ${URL} 2>&1 | grep "200 OK"` ]]; then
+            CHEF_FOUND=1;
+        else
+            VERSIONS="16.04 14.04 13.10 13.04 12.10 12.04 10.10 10.04"
+
+            for version in ${VERSIONS}
+            do
+                OS_VERSION=${version}
+                URL=${BASE_URL}/${OS_VERSION}/${CHEF_FILE}
+
+                if [[ `wget -S --spider ${URL} 2>&1 | grep "200 OK"` ]]; then
+                    CHEF_FOUND=1;
+                    break;
+                fi
+            done
+            CHEF_FOUND=0;
+        fi
+
+        if [[ ${CHEF_FOUND} -eq 1 ]]; then
+            ## Download package.
+            echo "Downloading ${URL}..."
+            sudo wget "${URL}" -q -O /tmp/${CHEF_FILE}
+
+            ## And finally install it with dpkg.
+            echo "Installing Chef version ${CHEF_VERSION}...";
+            sudo dpkg -i /tmp/${CHEF_FILE}
+        else
+            echo "Could not find Chef ${CHEF_VERSION} or any alternative, aborting."
+            exit 1;
+        fi
+    fi
+}
+
+function remove_chef_gem {
+    gem uninstall chef --all --verbose
+}
+
+function remove_chef_deb {
+    sudo dpkg -r chef
+}
+
+function is_chef_gem_installed {
+    GEM_CHECK="gem list ^chef$ -i"
+    if [ $# -eq 1 ]; then
+        GEM_CHECK="${GEM_CHECK} -v $1"
+    fi
+    if `${GEM_CHECK}`; then
+        return 0;
+    else
+        return 1;
+    fi
+}
+
+function is_chef_deb_installed {
+    if `chef-client -v | grep -qF "$1"`; then
+        return 0;
+    else
+        return 1;
+    fi
+}
+
+CHEF_VERSION="12.11.18"
+RUBY_VERSION="2.1"
+CHEF_METHOD="deb"
+
+# non interactive apt-get
+DEBIAN_FRONTEND="noninteractive"
+
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-echo 'LANG="en_US.UTF-8"' | sudo tee /etc/default/locale
-sudo apt-get update
-sudo apt-get -y install locales language-pack-en
-sudo update-locale LANG=en_US.UTF-8
+install_common
+install_ruby
 
-cd
-files=( ".profile" ".bashrc" )
-properties=( "LC_ALL" "LANG" "LANGUAGE" )
+case $CHEF_METHOD in
+    "gem")
+        install_chef_gem;;
+    "deb")
+        install_chef_deb;;
+esac
 
-for file in "${files[@]}"; do
-    touch $file
-    for property in "${properties[@]}"; do
-        sed -i "/export $property=/d" $file
-        echo "export $property=en_US.UTF-8" | tee -a $file
-    done
-done
-
-sudo apt-get -y install git ruby1.9.3 build-essential ntp
-sudo gem install bundler --no-ri --no-rdoc -V
+# Create Chef's default working directory.
+# Chef uses it to save some files, such as the client.pem.
+# We created it here mainly because `chef-client` might fail in the first
+# run if this directory doesn't exist.
+sudo mkdir -p /etc/chef
 
 cd $DIR
-bundle install
-bundle exec berks install
-bundle exec berks vendor cookbooks/
+sudo gem install bundler --no-ri --no-rdoc
+sudo bundle install
+sudo bundle exec berks install
+sudo bundle exec berks vendor cookbooks/
