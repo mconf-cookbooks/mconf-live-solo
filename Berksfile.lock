@@ -1,7 +1,7 @@
 DEPENDENCIES
   bigbluebutton
     git: https://github.com/mconf-cookbooks/bigbluebutton
-    revision: d91c74b0b2f56f5c66cddf8067aad2976a8fa323
+    revision: 9288dbccd34e2c13d21a945f904d086d38c25144
   ffmpeg
     git: https://github.com/mconf-cookbooks/ffmpeg
     revision: 989a9ac63b6b1788347357bbb5c3bc87232dd112
@@ -23,8 +23,8 @@ DEPENDENCIES
   yasm (= 1.0.0)
 
 GRAPH
-  apt (2.7.0)
-  bigbluebutton (1.0.10)
+  apt (6.1.0)
+  bigbluebutton (1.0.11)
     apt (>= 0.0.0)
     ffmpeg (>= 0.0.0)
     libvpx (>= 0.0.0)
